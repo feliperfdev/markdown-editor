@@ -43,6 +43,8 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
         _italicSelection();
       case MarkdownType.link:
         _linkSelection();
+      case MarkdownType.image:
+        _imageSelection();
       case MarkdownType.list:
         _listSelection();
       case MarkdownType.separator:
@@ -73,7 +75,14 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
   }
 
   void _headerSelection() {}
-  void _linkSelection() {}
+
+  void _linkSelection() {
+    final start = selectionIndexes.selectionStartIndex;
+    final end = selectionIndexes.selectionEndIndex;
+    textController.text = textController.text
+        .replaceRange(start, end, '[link_name](https://your_link_url.example)');
+  }
+
   void _listSelection() {
     final start = selectionIndexes.selectionStartIndex;
     final end = selectionIndexes.selectionEndIndex;
@@ -146,7 +155,18 @@ $textSelected
 ''';
   }
 
-  void _separatorSelection() {}
+  void _separatorSelection() {
+    final start = selectionIndexes.selectionStartIndex;
+    final end = selectionIndexes.selectionEndIndex;
+    textController.text = textController.text.replaceRange(start, end, '---');
+  }
+
+  void _imageSelection() {
+    final start = selectionIndexes.selectionStartIndex;
+    final end = selectionIndexes.selectionEndIndex;
+    textController.text = textController.text.replaceRange(
+        start, end, '![image_name](https://your_image_url.example)');
+  }
 
   @override
   ({int selectionEndIndex, int selectionStartIndex}) get selectionIndexes => (

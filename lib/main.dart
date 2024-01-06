@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(height: 40),
               MarkdownBody(
                 data: text,
+                softLineBreak: true,
               ),
             ],
           ),

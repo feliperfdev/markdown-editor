@@ -21,7 +21,11 @@ enum MarkdownType {
   ),
   link(
     'Link',
-    '',
+    'assets/icons/link.svg',
+  ),
+  image(
+    'Image',
+    'assets/icons/image.svg',
   ),
   bullet(
     'Bullet',
@@ -37,11 +41,11 @@ enum MarkdownType {
   ),
   blockquote(
     'Blockquote',
-    '',
+    'assets/icons/blockquote.svg',
   ),
   separator(
     'Separator',
-    '',
+    'assets/icons/separator.svg',
   );
 
   final String name;

@@ -7,10 +7,12 @@ import '../constants/options_constant_keys.dart';
 class MarkdownEditor extends StatefulWidget {
   final Color? optionsColor;
   final Function(String text) markdownText;
+  final bool? showTooltip;
   const MarkdownEditor({
     super.key,
     required this.markdownText,
     this.optionsColor,
+    this.showTooltip = true,
   });
 
   @override
@@ -39,20 +41,26 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
               Wrap(
                 children: [
                   ...controller.mdOptions
-                      .where((element) =>
-                          (element[OptionsConstantKey.optionIcon] as String)
+                      .where((type) =>
+                          (type[OptionsConstantKey.optionIcon] as String)
                               .isNotEmpty)
                       .map(
-                        (type) => TextButton(
-                          onPressed: () {
-                            controller.onSelectOption(
-                                type[OptionsConstantKey.optionType]);
-                          },
-                          child: SvgPicture.asset(
-                            type[OptionsConstantKey.optionIcon],
-                            colorFilter: ColorFilter.mode(
-                              widget.optionsColor ?? Colors.black,
-                              BlendMode.srcIn,
+                        (type) => Tooltip(
+                          decoration: widget.showTooltip!
+                              ? null
+                              : const BoxDecoration(),
+                          message: type[OptionsConstantKey.optionName],
+                          child: TextButton(
+                            onPressed: () {
+                              controller.onSelectOption(
+                                  type[OptionsConstantKey.optionType]);
+                            },
+                            child: SvgPicture.asset(
+                              type[OptionsConstantKey.optionIcon],
+                              colorFilter: ColorFilter.mode(
+                                widget.optionsColor ?? Colors.black,
+                                BlendMode.srcIn,
+                              ),
                             ),
                           ),
                         ),
