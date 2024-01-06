@@ -8,7 +8,7 @@ abstract class MarkdownEditorController {
   abstract final List<Map<String, dynamic>> mdOptions;
   void onSelectOption(MarkdownType type);
 
-  late ({int? selectionStartIndex, int? selectionEndIndex}) selectionIndexes;
+  ({int selectionStartIndex, int selectionEndIndex}) get selectionIndexes;
 }
 
 class MarkdownEditorControllerImpl implements MarkdownEditorController {
@@ -49,6 +49,8 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
         _separatorSelection();
       case MarkdownType.strikeThrough:
         _strikeThroughSelection();
+      case MarkdownType.underline:
+        _underlineSelection();
       default:
         textController.clear();
     }
@@ -63,8 +65,8 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
   }
 
   void _italicSelection() {
-    final start = textController.selection.start;
-    final end = textController.selection.end;
+    final start = selectionIndexes.selectionStartIndex;
+    final end = selectionIndexes.selectionEndIndex;
     final textSelected = textController.text.substring(start, end);
     textController.text =
         textController.text.replaceRange(start, end, '_${textSelected}_');
@@ -72,16 +74,70 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
 
   void _headerSelection() {}
   void _linkSelection() {}
-  void _listSelection() {}
-  void _bulletSelection() {}
-  void _strikeThroughSelection() {}
+  void _listSelection() {
+    final start = selectionIndexes.selectionStartIndex;
+    final end = selectionIndexes.selectionEndIndex;
+    final textSelected = textController.text.substring(start, end);
+
+    final splitted = textSelected.split('\n');
+
+    textController.text = textController.text.replaceRange(
+      start,
+      end,
+      splitted.map((e) {
+        final index = splitted.indexOf(e);
+        return index != splitted.length - 1
+            ? '${index + 1}. $e\n'
+            : '${index + 1}. $e';
+      }).join(),
+    );
+  }
+
+  void _bulletSelection() {
+    final start = selectionIndexes.selectionStartIndex;
+    final end = selectionIndexes.selectionEndIndex;
+    final textSelected = textController.text.substring(start, end);
+
+    final splitted = textSelected.split('\n');
+
+    textController.text = textController.text.replaceRange(
+      start,
+      end,
+      splitted.map((e) {
+        final index = splitted.indexOf(e);
+        return index != splitted.length - 1 ? '- $e\n' : '- $e';
+      }).join(),
+    );
+  }
+
+  void _strikeThroughSelection() {
+    final start = selectionIndexes.selectionStartIndex;
+    final end = selectionIndexes.selectionEndIndex;
+    final textSelected = textController.text.substring(start, end);
+    textController.text =
+        textController.text.replaceRange(start, end, '~~$textSelected~~');
+  }
+
+  void _underlineSelection() {
+    final start = selectionIndexes.selectionStartIndex;
+    final end = selectionIndexes.selectionEndIndex;
+    final textSelected = textController.text.substring(start, end);
+    textController.text =
+        textController.text.replaceRange(start, end, '<u>$textSelected</u>');
+  }
+
   void _blockQuoteSelection() {
-    textController.text = '> ${textController.text}';
+    final start = selectionIndexes.selectionStartIndex;
+    final end = selectionIndexes.selectionEndIndex;
+    final textSelected = textController.text.substring(start, end);
+
+    textController.text =
+        textController.text.replaceRange(start, end, '> $textSelected');
   }
 
   void _codeSelection() {
-    final start = textController.selection.start;
-    final end = textController.selection.end;
+    final start = selectionIndexes.selectionStartIndex;
+    final end = selectionIndexes.selectionEndIndex;
     final textSelected = textController.text.substring(start, end);
     textController.text = '''
 ```
@@ -93,8 +149,8 @@ $textSelected
   void _separatorSelection() {}
 
   @override
-  ({int? selectionEndIndex, int? selectionStartIndex}) selectionIndexes = (
-    selectionStartIndex: null,
-    selectionEndIndex: null,
-  );
+  ({int selectionEndIndex, int selectionStartIndex}) get selectionIndexes => (
+        selectionStartIndex: textController.selection.start,
+        selectionEndIndex: textController.selection.end,
+      );
 }

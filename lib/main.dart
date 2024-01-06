@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown_editor/src/widgets/md_editor_widget.dart';
 
 void main() {
@@ -31,6 +32,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String text = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +41,27 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            MarkdownEditor(),
-          ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: MarkdownEditor(
+                  markdownText: (value) {
+                    setState(() {
+                      text = value;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(height: 40),
+              MarkdownBody(
+                data: text,
+              ),
+            ],
+          ),
         ),
       ),
     );
