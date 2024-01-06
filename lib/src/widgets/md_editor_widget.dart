@@ -5,7 +5,15 @@ import 'package:markdown_editor/src/controllers/md_editor_controller.dart';
 import '../constants/options_constant_keys.dart';
 
 class MarkdownEditor extends StatefulWidget {
-  const MarkdownEditor({super.key});
+  final Color? optionsColor;
+  final Function(String text) markdownText;
+  final bool? showTooltip;
+  const MarkdownEditor({
+    super.key,
+    required this.markdownText,
+    this.optionsColor,
+    this.showTooltip = true,
+  });
 
   @override
   State<MarkdownEditor> createState() => _MarkdownEditorState();
@@ -13,6 +21,14 @@ class MarkdownEditor extends StatefulWidget {
 
 class _MarkdownEditorState extends State<MarkdownEditor> {
   final controller = MarkdownEditorControllerImpl();
+
+  @override
+  void initState() {
+    controller.textController.addListener(() {
+      widget.markdownText(controller.textController.text);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,24 +41,36 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
               Wrap(
                 children: [
                   ...controller.mdOptions
-                      .where((element) =>
-                          (element[OptionsConstantKey.optionIcon] as String)
+                      .where((type) =>
+                          (type[OptionsConstantKey.optionIcon] as String)
                               .isNotEmpty)
                       .map(
-                        (type) => TextButton(
-                          onPressed: () {
-                            controller.onSelectOption(
-                                type[OptionsConstantKey.optionType]);
-                          },
-                          child: SvgPicture.asset(
-                              type[OptionsConstantKey.optionIcon]),
+                        (type) => Tooltip(
+                          decoration: widget.showTooltip!
+                              ? null
+                              : const BoxDecoration(),
+                          message: type[OptionsConstantKey.optionName],
+                          child: TextButton(
+                            onPressed: () {
+                              controller.onSelectOption(
+                                  type[OptionsConstantKey.optionType]);
+                            },
+                            child: SvgPicture.asset(
+                              type[OptionsConstantKey.optionIcon],
+                              colorFilter: ColorFilter.mode(
+                                widget.optionsColor ?? Colors.black,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
                         ),
                       )
                 ],
               ),
+              const SizedBox(height: 8),
               SizedBox(
                 height: 190,
-                width: MediaQuery.sizeOf(context).width * .65,
+                width: MediaQuery.sizeOf(context).width,
                 child: TextFormField(
                   controller: controller.textController,
                   maxLines: 200,
