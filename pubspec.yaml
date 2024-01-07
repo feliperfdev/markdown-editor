@@ -2,7 +2,6 @@ name: markdown_editor_mobile_web
 description: "A Markdown flexible editor designed for Flutter."
 homepage: https://github.com/feliperfdev/markdown-editor
 
-# This package supports all platforms listed below.
 platforms:
   android:
   ios:
@@ -11,7 +10,7 @@ platforms:
 topics:
   - markdown
 
-version: 0.0.1+1
+version: 0.0.1+hotfix.readme
 
 environment:
   sdk: ">=3.2.0 <4.0.0"
