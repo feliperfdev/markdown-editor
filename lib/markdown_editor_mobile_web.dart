@@ -1,3 +1,3 @@
-library markdown_editor;
+library markdown_editor_mobile_web;
 
 export 'src/widgets/md_editor_widget.dart';
