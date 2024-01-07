@@ -11,6 +11,42 @@ void main() {
       },
     );
 
+    test('- Header 1 (#)', () {
+      final textController = controller.textController;
+      textController.text = 'flutter';
+      textController.selection = textController.selection.copyWith(
+        baseOffset: 0,
+        extentOffset: textController.text.length,
+      );
+      controller.headerCount = 1;
+      controller.onSelectType(MarkdownType.header);
+      expect(textController.text, '# flutter');
+    });
+
+    test('- Header 2 (##)', () {
+      final textController = controller.textController;
+      textController.text = 'flutter';
+      textController.selection = textController.selection.copyWith(
+        baseOffset: 0,
+        extentOffset: textController.text.length,
+      );
+      controller.headerCount = 2;
+      controller.onSelectType(MarkdownType.header);
+      expect(textController.text, '## flutter');
+    });
+
+    test('- Header 3 (###)', () {
+      final textController = controller.textController;
+      textController.text = 'flutter';
+      textController.selection = textController.selection.copyWith(
+        baseOffset: 0,
+        extentOffset: textController.text.length,
+      );
+      controller.headerCount = 3;
+      controller.onSelectType(MarkdownType.header);
+      expect(textController.text, '### flutter');
+    });
+
     test('- Bold', () {
       final textController = controller.textController;
       textController.text = 'flutter';
@@ -41,9 +77,26 @@ void main() {
         extentOffset: textController.text.length,
       );
       controller.onSelectType(MarkdownType.code);
+      expect(textController.text, "```widget```");
+    });
+
+    test('- Code | Multiline', () {
+      final textController = controller.textController;
+      textController.text = '''
+text1
+text2
+text3
+''';
+      textController.selection = textController.selection.copyWith(
+        baseOffset: 0,
+        extentOffset: textController.text.length - 1,
+      );
+      controller.onSelectType(MarkdownType.code);
       expect(textController.text, '''
 ```
-widget
+text1
+text2
+text3
 ```
 ''');
     });
@@ -58,17 +111,6 @@ widget
       controller.onSelectType(MarkdownType.blockquote);
       expect(textController.text, '> flutter is the future');
     });
-
-    // test('- Blockquote (semi selection)', () {
-    //   final textController = controller.textController;
-    //   textController.text = 'flutter is the future';
-    //   textController.selection = textController.selection.copyWith(
-    //     baseOffset: 8,
-    //     extentOffset: textController.text.length,
-    //   );
-    //   controller.onSelectType(MarkdownType.blockquote);
-    //   expect(textController.text, '> flutter is the future');
-    // });
 
     test('- Bullet', () {
       final textController = controller.textController;

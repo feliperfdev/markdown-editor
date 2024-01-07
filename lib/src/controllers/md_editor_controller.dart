@@ -159,8 +159,7 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
           : '''
 ```
 $_selectedText
-```
-''',
+```''',
     );
   }
 

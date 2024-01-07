@@ -158,11 +158,27 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
   }
 }
 
+/// Custom Markdown type Header Widget defined to be a
+/// [DropdownButton] for more then one kind of header type selection
 class _MarkdownHeaderButtonWidget extends StatelessWidget {
+  /// Header options list
+  ///
+  /// # Header (Header 1 - #)
+  /// ## Header (Header 2 - ##)
+  /// ### Header (Header 3 - ###)
   final List<String> headers;
+
+  /// Header option icon (already defined at [MarkdownType] enum)
   final String optionIcon;
+
+  /// Header option color
+  ///
+  /// Default value is [Colors.black]
   final Color? optionColor;
+
+  /// Header `#` counting added to text based on `h` parsed value
   final Function(int h) onSelectHeader;
+
   const _MarkdownHeaderButtonWidget({
     required this.headers,
     required this.optionIcon,
