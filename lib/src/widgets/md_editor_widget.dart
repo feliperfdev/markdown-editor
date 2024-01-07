@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:markdown_editor_mobile_web/src/controllers/md_editor_controller.dart';
 
 import '../constants/options_constant_keys.dart';
+import '../models/markdown_type.dart';
 
 class MarkdownEditor extends StatefulWidget {
   /// Returns raw markdown text at `text` String while being typed
@@ -101,19 +102,33 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                       decoration:
                           widget.showTooltip! ? null : const BoxDecoration(),
                       message: type[OptionsConstantKey.optionName],
-                      child: TextButton(
-                        onPressed: () {
-                          controller.onSelectType(
-                              type[OptionsConstantKey.optionType]);
-                        },
-                        child: SvgPicture.asset(
-                          type[OptionsConstantKey.optionIcon],
-                          colorFilter: ColorFilter.mode(
-                            widget.optionsColor!,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                      ),
+                      child: type[OptionsConstantKey.optionType] ==
+                              MarkdownType.header
+                          ? _MarkdownHeaderButtonWidget(
+                              headers: controller.headers,
+                              optionIcon: type[OptionsConstantKey.optionIcon],
+                              optionColor: widget.optionsColor,
+                              onSelectHeader: (h) {
+                                controller.headerCount = h;
+                                controller.onSelectType(MarkdownType.header);
+                              },
+                            )
+                          : TextButton(
+                              style: ButtonStyle(
+                                  overlayColor: MaterialStateProperty.all(
+                                      Colors.transparent)),
+                              onPressed: () {
+                                controller.onSelectType(
+                                    type[OptionsConstantKey.optionType]);
+                              },
+                              child: SvgPicture.asset(
+                                type[OptionsConstantKey.optionIcon],
+                                colorFilter: ColorFilter.mode(
+                                  widget.optionsColor!,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
                     ),
                   )
                 ],
@@ -140,5 +155,54 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
             ],
           );
         });
+  }
+}
+
+class _MarkdownHeaderButtonWidget extends StatelessWidget {
+  final List<String> headers;
+  final String optionIcon;
+  final Color? optionColor;
+  final Function(int h) onSelectHeader;
+  const _MarkdownHeaderButtonWidget({
+    required this.headers,
+    required this.optionIcon,
+    required this.optionColor,
+    required this.onSelectHeader,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 30,
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
+        ),
+        child: DropdownButton<String>(
+          underline: const SizedBox.shrink(),
+          value: headers.first,
+          items: headers.map(
+            (header) {
+              final index = headers.indexOf(header);
+              return DropdownMenuItem(
+                value: header,
+                child: SvgPicture.asset(
+                  optionIcon,
+                  height: 32 - (index * 5),
+                  colorFilter: ColorFilter.mode(
+                    optionColor!,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              );
+            },
+          ).toList(),
+          onChanged: (value) {
+            onSelectHeader(int.parse(value!.split(' ').last));
+          },
+        ),
+      ),
+    );
   }
 }

@@ -8,7 +8,7 @@ A Markdown flexible editor designed for Flutter.
 
 | Markdown          | Available |     |     |     |
 | ----------------- | --------- | --- | --- | --- |
-| # Header          | ❌        |     |     |     |
+| # Header          | ✅        |     |     |     |
 | **Bold**          | ✅        |     |     |     |
 | _Italic_          | ✅        |     |     |     |
 | ~~Strikethrough~~ | ✅        |     |     |     |

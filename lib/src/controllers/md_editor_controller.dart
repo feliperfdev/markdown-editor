@@ -6,6 +6,7 @@ import '../models/markdown_type.dart';
 abstract class MarkdownEditorController {
   abstract final TextEditingController textController;
   abstract final List<Map<String, dynamic>> mdTypes;
+  abstract final List<String> headers;
   void onSelectType(MarkdownType type);
 
   // Header `#` before selected text counting
@@ -15,6 +16,9 @@ abstract class MarkdownEditorController {
 class MarkdownEditorControllerImpl implements MarkdownEditorController {
   @override
   int headerCount = 1;
+
+  @override
+  final List<String> headers = ['Header 1', 'Header 2', 'Header 3'];
 
   @override
   final TextEditingController textController = TextEditingController();

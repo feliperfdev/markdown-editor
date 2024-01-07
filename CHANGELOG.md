@@ -25,4 +25,4 @@
 
 - Markdown type 'code' fix
 
-- Markdown type 'header' now is working (with button) putting just one '#'
+- Markdown type 'header' fix
