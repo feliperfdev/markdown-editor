@@ -49,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: MarkdownEditor(
+                  textFieldHeight: 230,
                   markdownText: (value) {
                     setState(() {
                       text = value;

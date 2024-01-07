@@ -1,6 +1,8 @@
 name: markdown_editor
 description: "A new Flutter project."
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+topics:
+  - markdown
 
 version: 1.0.0+1
 
@@ -27,6 +29,7 @@ flutter:
   assets:
     - assets/
     - assets/icons/
+    - assets/screenshots/
 
   # fonts:
   #   - family: Schyler

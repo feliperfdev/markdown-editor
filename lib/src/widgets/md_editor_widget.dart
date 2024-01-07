@@ -8,11 +8,15 @@ class MarkdownEditor extends StatefulWidget {
   final Color? optionsColor;
   final Function(String text) markdownText;
   final bool? showTooltip;
+  final double? textFieldHeight;
+  final int? textFieldMaxLines;
   const MarkdownEditor({
     super.key,
     required this.markdownText,
-    this.optionsColor,
+    this.optionsColor = Colors.black,
     this.showTooltip = true,
+    this.textFieldHeight = 190,
+    this.textFieldMaxLines = 200,
   });
 
   @override
@@ -40,48 +44,44 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
             children: [
               Wrap(
                 children: [
-                  ...controller.mdOptions
-                      .where((type) =>
-                          (type[OptionsConstantKey.optionIcon] as String)
-                              .isNotEmpty)
-                      .map(
-                        (type) => Tooltip(
-                          decoration: widget.showTooltip!
-                              ? null
-                              : const BoxDecoration(),
-                          message: type[OptionsConstantKey.optionName],
-                          child: TextButton(
-                            onPressed: () {
-                              controller.onSelectOption(
-                                  type[OptionsConstantKey.optionType]);
-                            },
-                            child: SvgPicture.asset(
-                              type[OptionsConstantKey.optionIcon],
-                              colorFilter: ColorFilter.mode(
-                                widget.optionsColor ?? Colors.black,
-                                BlendMode.srcIn,
-                              ),
-                            ),
+                  ...controller.mdOptions.map(
+                    (type) => Tooltip(
+                      decoration:
+                          widget.showTooltip! ? null : const BoxDecoration(),
+                      message: type[OptionsConstantKey.optionName],
+                      child: TextButton(
+                        onPressed: () {
+                          controller.onSelectOption(
+                              type[OptionsConstantKey.optionType]);
+                        },
+                        child: SvgPicture.asset(
+                          type[OptionsConstantKey.optionIcon],
+                          colorFilter: ColorFilter.mode(
+                            widget.optionsColor!,
+                            BlendMode.srcIn,
                           ),
                         ),
-                      )
+                      ),
+                    ),
+                  )
                 ],
               ),
               const SizedBox(height: 8),
               SizedBox(
-                height: 190,
+                height: widget.textFieldHeight,
                 width: MediaQuery.sizeOf(context).width,
                 child: TextFormField(
                   controller: controller.textController,
-                  maxLines: 200,
+                  maxLines: widget.textFieldMaxLines,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    borderSide: const BorderSide(
-                      color: Colors.black,
-                      width: 1.5,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: const BorderSide(
+                        color: Colors.black,
+                        width: 1.5,
+                      ),
                     ),
-                  )),
+                  ),
                 ),
               ),
             ],

@@ -9,9 +9,15 @@ abstract class MarkdownEditorController {
   void onSelectOption(MarkdownType type);
 
   ({int selectionStartIndex, int selectionEndIndex}) get selectionIndexes;
+
+  // Header `#` before selected text counting
+  int headerCount = 0;
 }
 
 class MarkdownEditorControllerImpl implements MarkdownEditorController {
+  @override
+  int headerCount = 0;
+
   @override
   final TextEditingController textController = TextEditingController();
 
@@ -38,7 +44,7 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
       case MarkdownType.code:
         _codeSelection();
       case MarkdownType.header:
-        _headerSelection();
+        _headerSelection(headerCount);
       case MarkdownType.italic:
         _italicSelection();
       case MarkdownType.link:
@@ -58,41 +64,46 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
     }
   }
 
+  // Initial selection cursor index on text
+  int get _start => selectionIndexes.selectionStartIndex;
+  // End selection cursor index on text
+
+  int get _end => selectionIndexes.selectionEndIndex;
+
+  // Selected text between both initial and end indexes on [TextField]
+  String get _selectedText => textController.text.substring(_start, _end);
+
   void _boldSelection() {
-    final start = textController.selection.start;
-    final end = textController.selection.end;
-    final textSelected = textController.text.substring(start, end);
     textController.text =
-        textController.text.replaceRange(start, end, '**$textSelected**');
+        textController.text.replaceRange(_start, _end, '**$_selectedText**');
   }
 
   void _italicSelection() {
-    final start = selectionIndexes.selectionStartIndex;
-    final end = selectionIndexes.selectionEndIndex;
-    final textSelected = textController.text.substring(start, end);
     textController.text =
-        textController.text.replaceRange(start, end, '_${textSelected}_');
+        textController.text.replaceRange(_start, _end, '_${_selectedText}_');
   }
 
-  void _headerSelection() {}
+  void _headerSelection(int h) {
+    if (h >= 0 && h <= 3) {
+      textController.text = textController.text.replaceRange(
+        _start,
+        _end,
+        '${h == 0 ? "" : List.generate(h, (_) => '#').join()} $_selectedText',
+      );
+    }
+  }
 
   void _linkSelection() {
-    final start = selectionIndexes.selectionStartIndex;
-    final end = selectionIndexes.selectionEndIndex;
-    textController.text = textController.text
-        .replaceRange(start, end, '[link_name](https://your_link_url.example)');
+    textController.text = textController.text.replaceRange(
+        _start, _end, '[link_name](https://your_link_url.example)');
   }
 
   void _listSelection() {
-    final start = selectionIndexes.selectionStartIndex;
-    final end = selectionIndexes.selectionEndIndex;
-    final textSelected = textController.text.substring(start, end);
-
-    final splitted = textSelected.split('\n');
+    final splitted = _selectedText.split('\n');
 
     textController.text = textController.text.replaceRange(
-      start,
-      end,
+      _start,
+      _end,
       splitted.map((e) {
         final index = splitted.indexOf(e);
         return index != splitted.length - 1
@@ -103,15 +114,11 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
   }
 
   void _bulletSelection() {
-    final start = selectionIndexes.selectionStartIndex;
-    final end = selectionIndexes.selectionEndIndex;
-    final textSelected = textController.text.substring(start, end);
-
-    final splitted = textSelected.split('\n');
+    final splitted = _selectedText.split('\n');
 
     textController.text = textController.text.replaceRange(
-      start,
-      end,
+      _start,
+      _end,
       splitted.map((e) {
         final index = splitted.indexOf(e);
         return index != splitted.length - 1 ? '- $e\n' : '- $e';
@@ -120,52 +127,35 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
   }
 
   void _strikeThroughSelection() {
-    final start = selectionIndexes.selectionStartIndex;
-    final end = selectionIndexes.selectionEndIndex;
-    final textSelected = textController.text.substring(start, end);
     textController.text =
-        textController.text.replaceRange(start, end, '~~$textSelected~~');
+        textController.text.replaceRange(_start, _end, '~~$_selectedText~~');
   }
 
   void _underlineSelection() {
-    final start = selectionIndexes.selectionStartIndex;
-    final end = selectionIndexes.selectionEndIndex;
-    final textSelected = textController.text.substring(start, end);
     textController.text =
-        textController.text.replaceRange(start, end, '<u>$textSelected</u>');
+        textController.text.replaceRange(_start, _end, '<u>$_selectedText</u>');
   }
 
   void _blockQuoteSelection() {
-    final start = selectionIndexes.selectionStartIndex;
-    final end = selectionIndexes.selectionEndIndex;
-    final textSelected = textController.text.substring(start, end);
-
     textController.text =
-        textController.text.replaceRange(start, end, '> $textSelected');
+        textController.text.replaceRange(_start, _end, '> $_selectedText');
   }
 
   void _codeSelection() {
-    final start = selectionIndexes.selectionStartIndex;
-    final end = selectionIndexes.selectionEndIndex;
-    final textSelected = textController.text.substring(start, end);
     textController.text = '''
 ```
-$textSelected
+$_selectedText
 ```
 ''';
   }
 
   void _separatorSelection() {
-    final start = selectionIndexes.selectionStartIndex;
-    final end = selectionIndexes.selectionEndIndex;
-    textController.text = textController.text.replaceRange(start, end, '---');
+    textController.text = textController.text.replaceRange(_start, _end, '---');
   }
 
   void _imageSelection() {
-    final start = selectionIndexes.selectionStartIndex;
-    final end = selectionIndexes.selectionEndIndex;
     textController.text = textController.text.replaceRange(
-        start, end, '![image_name](https://your_image_url.example)');
+        _start, _end, '![image_name](https://your_image_url.example)');
   }
 
   @override
