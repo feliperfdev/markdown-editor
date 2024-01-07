@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:markdown_editor/src/controllers/md_editor_controller.dart';
-import 'package:markdown_editor/src/models/markdown_type.dart';
+import 'package:markdown_editor_mobile_web/src/controllers/md_editor_controller.dart';
+import 'package:markdown_editor_mobile_web/src/models/markdown_type.dart';
 
 void main() {
   group('Check if Markdown type is correctly applied on text selection', () {
