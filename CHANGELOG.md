@@ -25,4 +25,7 @@
 
 - Markdown type 'code' fix
 
+  - Code multiline fix
+
 - Markdown type 'header' fix
+  - Multiselection for different 'Header' sizes
