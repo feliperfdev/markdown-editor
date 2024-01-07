@@ -10,7 +10,7 @@ platforms:
 topics:
   - markdown
 
-version: 0.0.1+hotfix.screenshot
+version: 0.0.1+2
 
 environment:
   sdk: ">=3.2.0 <4.0.0"

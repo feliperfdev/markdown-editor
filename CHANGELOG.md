@@ -15,3 +15,14 @@
 ## 0.0.1+1
 
 - Platforms reference
+
+## 0.0.1+2
+
+- It's possible to change editor border radius and border color
+- It's possible to determine spacing between editor and Markdown options
+
+- Some fields now are documented following Dart Docs reference
+
+- Markdown type 'code' fix
+
+- Markdown type 'header' now is working (with button) putting just one '#'

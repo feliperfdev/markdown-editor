@@ -5,11 +5,46 @@ import 'package:markdown_editor_mobile_web/src/controllers/md_editor_controller.
 import '../constants/options_constant_keys.dart';
 
 class MarkdownEditor extends StatefulWidget {
-  final Color? optionsColor;
+  /// Returns raw markdown text at `text` String while being typed
   final Function(String text) markdownText;
+
+  /// Changes color of the Markdown options in the top of
+  /// editor.
+  ///
+  /// Default value is [Colors.black]
+  final Color? optionsColor;
+
+  /// If true, enable [Tooltip] view while moving mouse
+  /// pointer over markdown options
+  ///
+  /// Default value is `true`
   final bool? showTooltip;
+
+  /// Determines [TextFormField] height
+  ///
+  /// Default value is `190`
   final double? textFieldHeight;
+
+  /// Determines [TextFormField] max lines
+  ///
+  /// Default value is `200`
   final int? textFieldMaxLines;
+
+  /// Determines [TextFormField] BorderRadius
+  ///
+  /// Default value is [BorderRadius.circular(4)]
+  final BorderRadius? inputBorderRadius;
+
+  /// Determines [TextFormField] border color
+  ///
+  /// Default value is [Colors.black]
+  final Color? inputBorderColor;
+
+  /// Determines spacing between editor and Markdown options
+  ///
+  /// Default value is `8`
+  final double? optionsSpacingFromEditor;
+
   const MarkdownEditor({
     super.key,
     required this.markdownText,
@@ -17,6 +52,9 @@ class MarkdownEditor extends StatefulWidget {
     this.showTooltip = true,
     this.textFieldHeight = 190,
     this.textFieldMaxLines = 200,
+    this.inputBorderRadius,
+    this.inputBorderColor = Colors.black,
+    this.optionsSpacingFromEditor = 8,
   });
 
   @override
@@ -26,12 +64,26 @@ class MarkdownEditor extends StatefulWidget {
 class _MarkdownEditorState extends State<MarkdownEditor> {
   final controller = MarkdownEditorControllerImpl();
 
+  /// Will trigger on Widget initState to update the raw
+  /// Markdown text while being typed at the [TextFormField]
+  ///
+  /// On initState, this procedure is added as [TextEditingController]
+  /// listener, then is removed on dispose.
+  void _setMarkdownText() =>
+      widget.markdownText(controller.textController.text);
+
   @override
   void initState() {
-    controller.textController.addListener(() {
-      widget.markdownText(controller.textController.text);
-    });
+    controller.textController.addListener(_setMarkdownText);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.textController.removeListener(_setMarkdownText);
+    controller.textController.clear();
+    controller.textController.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,14 +96,14 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
             children: [
               Wrap(
                 children: [
-                  ...controller.mdOptions.map(
+                  ...controller.mdTypes.map(
                     (type) => Tooltip(
                       decoration:
                           widget.showTooltip! ? null : const BoxDecoration(),
                       message: type[OptionsConstantKey.optionName],
                       child: TextButton(
                         onPressed: () {
-                          controller.onSelectOption(
+                          controller.onSelectType(
                               type[OptionsConstantKey.optionType]);
                         },
                         child: SvgPicture.asset(
@@ -66,7 +118,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                   )
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: widget.optionsSpacingFromEditor),
               SizedBox(
                 height: widget.textFieldHeight,
                 width: MediaQuery.sizeOf(context).width,
@@ -75,9 +127,10 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                   maxLines: widget.textFieldMaxLines,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: const BorderSide(
-                        color: Colors.black,
+                      borderRadius:
+                          widget.inputBorderRadius ?? BorderRadius.circular(4),
+                      borderSide: BorderSide(
+                        color: widget.inputBorderColor ?? Colors.black,
                         width: 1.5,
                       ),
                     ),

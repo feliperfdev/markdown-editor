@@ -5,10 +5,8 @@ import '../models/markdown_type.dart';
 
 abstract class MarkdownEditorController {
   abstract final TextEditingController textController;
-  abstract final List<Map<String, dynamic>> mdOptions;
-  void onSelectOption(MarkdownType type);
-
-  ({int selectionStartIndex, int selectionEndIndex}) get selectionIndexes;
+  abstract final List<Map<String, dynamic>> mdTypes;
+  void onSelectType(MarkdownType type);
 
   // Header `#` before selected text counting
   int headerCount = 0;
@@ -16,13 +14,13 @@ abstract class MarkdownEditorController {
 
 class MarkdownEditorControllerImpl implements MarkdownEditorController {
   @override
-  int headerCount = 0;
+  int headerCount = 1;
 
   @override
   final TextEditingController textController = TextEditingController();
 
   @override
-  final List<Map<String, dynamic>> mdOptions = MarkdownType.values
+  final List<Map<String, dynamic>> mdTypes = MarkdownType.values
       .map(
         (type) => {
           OptionsConstantKey.optionType: type,
@@ -33,7 +31,7 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
       .toList();
 
   @override
-  void onSelectOption(MarkdownType type) {
+  void onSelectType(MarkdownType type) {
     switch (type) {
       case MarkdownType.bold:
         _boldSelection();
@@ -63,6 +61,11 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
         textController.clear();
     }
   }
+
+  ({int selectionEndIndex, int selectionStartIndex}) get selectionIndexes => (
+        selectionStartIndex: textController.selection.start,
+        selectionEndIndex: textController.selection.end,
+      );
 
   // Initial selection cursor index on text
   int get _start => selectionIndexes.selectionStartIndex;
@@ -142,11 +145,19 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
   }
 
   void _codeSelection() {
-    textController.text = '''
+    final lines = '\n'.allMatches(_selectedText).length + 1;
+
+    textController.text = textController.text.replaceRange(
+      _start,
+      _end,
+      lines == 1
+          ? "```$_selectedText```"
+          : '''
 ```
 $_selectedText
 ```
-''';
+''',
+    );
   }
 
   void _separatorSelection() {
@@ -157,10 +168,4 @@ $_selectedText
     textController.text = textController.text.replaceRange(
         _start, _end, '![image_name](https://your_image_url.example)');
   }
-
-  @override
-  ({int selectionEndIndex, int selectionStartIndex}) get selectionIndexes => (
-        selectionStartIndex: textController.selection.start,
-        selectionEndIndex: textController.selection.end,
-      );
 }

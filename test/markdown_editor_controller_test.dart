@@ -18,7 +18,7 @@ void main() {
         baseOffset: 0,
         extentOffset: textController.text.length,
       );
-      controller.onSelectOption(MarkdownType.bold);
+      controller.onSelectType(MarkdownType.bold);
       expect(textController.text, '**flutter**');
     });
 
@@ -29,7 +29,7 @@ void main() {
         baseOffset: 0,
         extentOffset: textController.text.length,
       );
-      controller.onSelectOption(MarkdownType.italic);
+      controller.onSelectType(MarkdownType.italic);
       expect(textController.text, '_flutterweb_');
     });
 
@@ -40,7 +40,7 @@ void main() {
         baseOffset: 0,
         extentOffset: textController.text.length,
       );
-      controller.onSelectOption(MarkdownType.code);
+      controller.onSelectType(MarkdownType.code);
       expect(textController.text, '''
 ```
 widget
@@ -55,7 +55,7 @@ widget
         baseOffset: 0,
         extentOffset: textController.text.length,
       );
-      controller.onSelectOption(MarkdownType.blockquote);
+      controller.onSelectType(MarkdownType.blockquote);
       expect(textController.text, '> flutter is the future');
     });
 
@@ -66,7 +66,7 @@ widget
     //     baseOffset: 8,
     //     extentOffset: textController.text.length,
     //   );
-    //   controller.onSelectOption(MarkdownType.blockquote);
+    //   controller.onSelectType(MarkdownType.blockquote);
     //   expect(textController.text, '> flutter is the future');
     // });
 
@@ -82,7 +82,7 @@ Four
         baseOffset: 0,
         extentOffset: textController.text.length - 1,
       );
-      controller.onSelectOption(MarkdownType.bullet);
+      controller.onSelectType(MarkdownType.bullet);
       expect(textController.text, '''
 - One
 - Two
@@ -103,7 +103,7 @@ Four
         baseOffset: 0,
         extentOffset: textController.text.length - 1,
       );
-      controller.onSelectOption(MarkdownType.list);
+      controller.onSelectType(MarkdownType.list);
       expect(textController.text, '''
 1. One
 2. Two

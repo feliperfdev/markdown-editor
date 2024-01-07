@@ -18,7 +18,7 @@ A Markdown flexible editor designed for Flutter.
 | [link_example]()  | ✅        |     |     |     |
 | Image (network)   | ✅        |     |     |     |
 | - [x] Checkbox    | ❌        |     |     |     |
-| Code              | ❌        |     |     |     |
+| Code              | ✅        |     |     |     |
 | Blockquote        | ✅        |     |     |     |
 | Font family       | ❌        |     |     |     |
 | Text color        | ❌        |     |     |     |
