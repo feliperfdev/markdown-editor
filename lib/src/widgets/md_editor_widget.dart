@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:markdown_editor/src/controllers/md_editor_controller.dart';
+import 'package:markdown_editor_mobile_web/src/controllers/md_editor_controller.dart';
 
 import '../constants/options_constant_keys.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:markdown_editor/src/widgets/md_editor_widget.dart';
+import 'package:markdown_editor_mobile_web/src/widgets/md_editor_widget.dart';
 
 void main() {
   runApp(const MyApp());
