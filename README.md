@@ -2,7 +2,7 @@
 
 A flexible and easily decoratable Markdown editor designed for Flutter.
 
-![example_1](https://raw.githubusercontent.com/feliperfdev/markdown-editor/main/assets/screenshots/example_1.png)
+![example_1](https://raw.githubusercontent.com/feliperfdev/markdown-editor/v0.0.3-pre-md-editor/assets/screenshots/example_1.png)
 
 With markdown you can customize texts in your blog, diary or chats. Either increasing font size, or giving it a bold or italic appearance, underlining it, changing color, centralizing or creating different types of lists or tables.
 
