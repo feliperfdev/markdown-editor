@@ -2,7 +2,7 @@
 
 A Markdown flexible editor designed for Flutter.
 
-![example_1](assets/screenshots/example_1.png)
+![example_1](https://raw.githubusercontent.com/feliperfdev/markdown-editor/main/assets/screenshots/example_1.png)
 
 #### Markdown options
 
