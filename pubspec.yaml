@@ -1,5 +1,6 @@
 name: markdown_editor
-description: "A new Flutter project."
+description: "A Markdown flexible editor designed for Flutter."
+homepage: https://github.com/feliperfdev/markdown-editor
 
 topics:
   - markdown
