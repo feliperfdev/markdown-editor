@@ -11,3 +11,7 @@
 - Flexible Markdown options row
 
 - Easy decorated editor
+
+## 0.0.1+1
+
+- Platforms reference
