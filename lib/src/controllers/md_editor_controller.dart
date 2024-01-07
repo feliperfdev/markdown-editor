@@ -6,7 +6,8 @@ import '../models/markdown_type.dart';
 abstract class MarkdownEditorController {
   abstract final TextEditingController textController;
   abstract final List<Map<String, dynamic>> mdTypes;
-  abstract final List<String> headers;
+
+  abstract final List<int> headers;
   void onSelectType(MarkdownType type);
 
   // Header `#` before selected text counting
@@ -18,7 +19,7 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
   int headerCount = 1;
 
   @override
-  final List<String> headers = ['Header 1', 'Header 2', 'Header 3'];
+  final List<int> headers = [1, 2, 3];
 
   @override
   final TextEditingController textController = TextEditingController();
@@ -101,8 +102,8 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
   }
 
   void _linkSelection() {
-    textController.text = textController.text.replaceRange(
-        _start, _end, '[link_name](https://your_link_url.example)');
+    textController.text = textController.text.replaceRange(_start, _end,
+        '[${_selectedText.trim().isEmpty ? "link_example" : _selectedText}](https://your_link_url.example)');
   }
 
   void _listSelection() {
@@ -168,7 +169,7 @@ $_selectedText
   }
 
   void _imageSelection() {
-    textController.text = textController.text.replaceRange(
-        _start, _end, '![image_name](https://your_image_url.example)');
+    textController.text = textController.text.replaceRange(_start, _end,
+        '![${_selectedText.trim().isEmpty ? "image_example" : _selectedText}](https://your_image_url.example)');
   }
 }

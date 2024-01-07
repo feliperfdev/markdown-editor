@@ -29,3 +29,11 @@
 
 - Markdown type 'header' fix
   - Multiselection for different 'Header' sizes
+
+### 0.0.3
+
+- Link and image using selected text when has some selection on text field
+
+- Decoratable input text selection color and cursor color
+
+<!-- TODO(Felipe): Checkbox selection -->
