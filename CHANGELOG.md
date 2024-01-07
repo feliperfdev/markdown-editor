@@ -16,7 +16,7 @@
 
 - Platforms reference
 
-## 0.0.1+2
+## 0.0.2
 
 - It's possible to change editor border radius and border color
 - It's possible to determine spacing between editor and Markdown options
