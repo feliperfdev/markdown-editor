@@ -62,6 +62,8 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
         _strikeThroughSelection();
       case MarkdownType.underline:
         _underlineSelection();
+      case MarkdownType.checkbox:
+        _checkboxBuilder(marked: false);
       default:
         textController.clear();
     }
@@ -112,11 +114,11 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
     textController.text = textController.text.replaceRange(
       _start,
       _end,
-      splitted.map((e) {
-        final index = splitted.indexOf(e);
+      splitted.indexed.map((e) {
+        final index = e.$1;
         return index != splitted.length - 1
-            ? '${index + 1}. $e\n'
-            : '${index + 1}. $e';
+            ? '${index + 1}. ${e.$2}\n'
+            : '${index + 1}. ${e.$2}';
       }).join(),
     );
   }
@@ -171,5 +173,17 @@ $_selectedText
   void _imageSelection() {
     textController.text = textController.text.replaceRange(_start, _end,
         '![${_selectedText.trim().isEmpty ? "image_example" : _selectedText}](https://your_image_url.example)');
+  }
+
+  void _checkboxBuilder({bool marked = false}) {
+    final splitted = _selectedText.split('\n');
+
+    textController.text = textController.text.replaceRange(
+        _start,
+        _end,
+        splitted.indexed.map((e) {
+          final index = splitted.indexOf(e.$2);
+          return '- [${marked ? "x" : " "}] ${_selectedText.isEmpty ? 'Text' : e.$2}${index == splitted.length - 1 ? '' : '\n'}';
+        }).join());
   }
 }

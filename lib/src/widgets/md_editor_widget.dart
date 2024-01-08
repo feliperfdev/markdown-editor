@@ -6,6 +6,8 @@ import '../constants/options_constant_keys.dart';
 import '../models/markdown_type.dart';
 
 class MarkdownEditor extends StatefulWidget {
+  final String? initialValue;
+
   /// Returns raw markdown text at `text` String while being typed
   final Function(String text) markdownText;
 
@@ -21,32 +23,32 @@ class MarkdownEditor extends StatefulWidget {
   /// Default value is `true`
   final bool? showTooltip;
 
-  /// Determines [TextFormField] height
+  /// Determines text field height
   ///
   /// Default value is `190`
   final double? textFieldHeight;
 
-  /// Determines [TextFormField] max lines
+  /// Determines text field max lines
   ///
   /// Default value is `200`
   final int? textFieldMaxLines;
 
-  /// Determines [TextFormField] BorderRadius
+  /// Determines text field BorderRadius
   ///
   /// Default value is [BorderRadius.circular(4)]
   final BorderRadius? inputBorderRadius;
 
-  /// Determines [TextFormField] border color
+  /// Determines text field border color
   ///
   /// Default value is [Colors.black]
   final Color? inputBorderColor;
 
-  /// Determines [TextFormField] cursor color
+  /// Determines text field cursor color
   ///
   /// Default value is [Colors.black]
   final Color? inputCursorColor;
 
-  /// Determines [TextFormField] text selection color
+  /// Determines text field text selection color
   ///
   /// Default value is [Colors.black26]
   final Color? inputTextSelectionColor;
@@ -58,12 +60,13 @@ class MarkdownEditor extends StatefulWidget {
 
   const MarkdownEditor({
     super.key,
+    this.initialValue,
     required this.markdownText,
     this.optionsColor = Colors.black,
     this.showTooltip = true,
     this.textFieldHeight = 190,
     this.textFieldMaxLines = 200,
-    this.inputBorderRadius,
+    this.inputBorderRadius = BorderRadius.zero,
     this.inputCursorColor = Colors.black,
     this.inputTextSelectionColor,
     this.inputBorderColor = Colors.black,
@@ -87,6 +90,9 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
 
   @override
   void initState() {
+    if (widget.initialValue != null) {
+      controller.textController.text = widget.initialValue!;
+    }
     controller.textController.addListener(_setMarkdownText);
     super.initState();
   }
@@ -135,7 +141,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                                 controller.onSelectType(
                                     type[OptionsConstantKey.optionType]);
                               },
-                              child: SvgPicture.asset(
+                              child: SvgPicture.string(
                                 type[OptionsConstantKey.optionIcon],
                                 colorFilter: ColorFilter.mode(
                                   widget.optionsColor!,
@@ -226,7 +232,7 @@ class _MarkdownHeaderButtonWidget extends StatelessWidget {
               .map(
                 (header) => DropdownMenuItem(
                   value: header,
-                  child: SvgPicture.asset(
+                  child: SvgPicture.string(
                     optionIcon,
                     height: 32 - ((header - 1) * 5),
                     colorFilter: ColorFilter.mode(

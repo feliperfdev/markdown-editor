@@ -10,7 +10,7 @@ platforms:
 topics:
   - markdown
 
-version: 0.0.2
+version: 0.0.3
 
 environment:
   sdk: ">=3.2.0 <4.0.0"
@@ -21,7 +21,6 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.9
-  flutter_markdown: ^0.6.18+3
 
 dev_dependencies:
   flutter_test:
@@ -34,18 +33,4 @@ flutter:
 
   assets:
     - assets/
-    - assets/icons/
     - assets/screenshots/
-
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #

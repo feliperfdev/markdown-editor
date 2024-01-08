@@ -1,3 +1,5 @@
+import '../constants/markdown_svg.dart';
+
 enum MarkdownType {
   ///
   /// ##### Title
@@ -8,7 +10,7 @@ enum MarkdownType {
   ///
   header(
     'Header',
-    'assets/icons/header.svg',
+    MarkdownSvg.header,
   ),
 
   ///
@@ -16,7 +18,7 @@ enum MarkdownType {
   ///
   bold(
     'Bold',
-    'assets/icons/bold.svg',
+    MarkdownSvg.bold,
   ),
 
   ///
@@ -24,7 +26,7 @@ enum MarkdownType {
   ///
   italic(
     'Italic',
-    'assets/icons/italic.svg',
+    MarkdownSvg.italic,
   ),
 
   ///
@@ -32,7 +34,7 @@ enum MarkdownType {
   ///
   underline(
     'Underline',
-    'assets/icons/underline.svg',
+    MarkdownSvg.underline,
   ),
 
   ///
@@ -40,7 +42,7 @@ enum MarkdownType {
   ///
   strikeThrough(
     'Strike Through',
-    'assets/icons/strikethrough.svg',
+    MarkdownSvg.strikethrough,
   ),
 
   ///
@@ -48,7 +50,7 @@ enum MarkdownType {
   ///
   link(
     'Link',
-    'assets/icons/link.svg',
+    MarkdownSvg.link,
   ),
 
   ///
@@ -56,7 +58,7 @@ enum MarkdownType {
   ///
   image(
     'Image',
-    'assets/icons/image.svg',
+    MarkdownSvg.image,
   ),
 
   ///
@@ -66,7 +68,7 @@ enum MarkdownType {
   ///
   bullet(
     'Bullet',
-    'assets/icons/bullet.svg',
+    MarkdownSvg.bullet,
   ),
 
   ///
@@ -76,7 +78,7 @@ enum MarkdownType {
   ///
   list(
     'List',
-    'assets/icons/list.svg',
+    MarkdownSvg.list,
   ),
 
   ///
@@ -86,7 +88,7 @@ enum MarkdownType {
   ///
   code(
     'Code',
-    'assets/icons/code.svg',
+    MarkdownSvg.code,
   ),
 
   ///
@@ -94,7 +96,7 @@ enum MarkdownType {
   ///
   blockquote(
     'Blockquote',
-    'assets/icons/blockquote.svg',
+    MarkdownSvg.blockquote,
   ),
 
   ///
@@ -104,7 +106,12 @@ enum MarkdownType {
   ///
   separator(
     'Separator',
-    'assets/icons/separator.svg',
+    MarkdownSvg.separator,
+  ),
+
+  checkbox(
+    'Checkbox',
+    MarkdownSvg.checkbox,
   );
 
   final String name;
