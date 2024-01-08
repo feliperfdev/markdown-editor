@@ -7,7 +7,8 @@
         {
             "name": "markdown_editor",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "example/lib/main.dart"
         },
         {
             "name": "markdown_editor (profile mode)",

@@ -29,3 +29,27 @@
 
 - Markdown type 'header' fix
   - Multiselection for different 'Header' sizes
+
+### 0.0.3
+
+- Link and image using selected text when has some selection on text field
+
+- Decoratable input text selection color and cursor color
+
+- Checkbox markdown button added
+
+- Ordered list markdown multiline selection fix when applied with button use
+
+- `flutter_markdown` removed from dependencies
+
+  ```
+  RAW TEXT        BEFORE              NOW
+
+  different       1. different        1. different
+  repeated        2. repeated         2. repeated
+  repeated        2. repeated         3. repeated
+  repeated        2. repeated         4. repeated
+  different_2     3. different_2      5. different_2
+  ```
+
+<!-- TODO(Felipe): Checkbox multi-selection button (checked and unchecked options) -->

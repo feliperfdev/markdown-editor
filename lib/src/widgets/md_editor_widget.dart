@@ -6,6 +6,8 @@ import '../constants/options_constant_keys.dart';
 import '../models/markdown_type.dart';
 
 class MarkdownEditor extends StatefulWidget {
+  final String? initialValue;
+
   /// Returns raw markdown text at `text` String while being typed
   final Function(String text) markdownText;
 
@@ -21,25 +23,35 @@ class MarkdownEditor extends StatefulWidget {
   /// Default value is `true`
   final bool? showTooltip;
 
-  /// Determines [TextFormField] height
+  /// Determines text field height
   ///
   /// Default value is `190`
   final double? textFieldHeight;
 
-  /// Determines [TextFormField] max lines
+  /// Determines text field max lines
   ///
   /// Default value is `200`
   final int? textFieldMaxLines;
 
-  /// Determines [TextFormField] BorderRadius
+  /// Determines text field BorderRadius
   ///
   /// Default value is [BorderRadius.circular(4)]
   final BorderRadius? inputBorderRadius;
 
-  /// Determines [TextFormField] border color
+  /// Determines text field border color
   ///
   /// Default value is [Colors.black]
   final Color? inputBorderColor;
+
+  /// Determines text field cursor color
+  ///
+  /// Default value is [Colors.black]
+  final Color? inputCursorColor;
+
+  /// Determines text field text selection color
+  ///
+  /// Default value is [Colors.black26]
+  final Color? inputTextSelectionColor;
 
   /// Determines spacing between editor and Markdown options
   ///
@@ -48,12 +60,15 @@ class MarkdownEditor extends StatefulWidget {
 
   const MarkdownEditor({
     super.key,
+    this.initialValue,
     required this.markdownText,
     this.optionsColor = Colors.black,
     this.showTooltip = true,
     this.textFieldHeight = 190,
     this.textFieldMaxLines = 200,
-    this.inputBorderRadius,
+    this.inputBorderRadius = BorderRadius.zero,
+    this.inputCursorColor = Colors.black,
+    this.inputTextSelectionColor,
     this.inputBorderColor = Colors.black,
     this.optionsSpacingFromEditor = 8,
   });
@@ -75,6 +90,9 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
 
   @override
   void initState() {
+    if (widget.initialValue != null) {
+      controller.textController.text = widget.initialValue!;
+    }
     controller.textController.addListener(_setMarkdownText);
     super.initState();
   }
@@ -115,13 +133,15 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                             )
                           : TextButton(
                               style: ButtonStyle(
-                                  overlayColor: MaterialStateProperty.all(
-                                      Colors.transparent)),
+                                overlayColor: MaterialStateProperty.all(
+                                  Colors.transparent,
+                                ),
+                              ),
                               onPressed: () {
                                 controller.onSelectType(
                                     type[OptionsConstantKey.optionType]);
                               },
-                              child: SvgPicture.asset(
+                              child: SvgPicture.string(
                                 type[OptionsConstantKey.optionIcon],
                                 colorFilter: ColorFilter.mode(
                                   widget.optionsColor!,
@@ -133,20 +153,30 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                   )
                 ],
               ),
+              // Spacing between Markdown types and text editor
               SizedBox(height: widget.optionsSpacingFromEditor),
               SizedBox(
                 height: widget.textFieldHeight,
                 width: MediaQuery.sizeOf(context).width,
-                child: TextFormField(
-                  controller: controller.textController,
-                  maxLines: widget.textFieldMaxLines,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius:
-                          widget.inputBorderRadius ?? BorderRadius.circular(4),
-                      borderSide: BorderSide(
-                        color: widget.inputBorderColor ?? Colors.black,
-                        width: 1.5,
+                child: Theme(
+                  data: ThemeData(
+                    textSelectionTheme: TextSelectionThemeData(
+                      cursorColor: widget.inputCursorColor,
+                      selectionColor:
+                          widget.inputTextSelectionColor ?? Colors.black26,
+                    ),
+                  ),
+                  child: TextFormField(
+                    controller: controller.textController,
+                    maxLines: widget.textFieldMaxLines,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: widget.inputBorderRadius ??
+                            BorderRadius.circular(4),
+                        borderSide: BorderSide(
+                          color: widget.inputBorderColor ?? Colors.black,
+                          width: 1.5,
+                        ),
                       ),
                     ),
                   ),
@@ -159,14 +189,14 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
 }
 
 /// Custom Markdown type Header Widget defined to be a
-/// [DropdownButton] for more then one kind of header type selection
+/// [DropdownButton] for more then one option of header type selection
 class _MarkdownHeaderButtonWidget extends StatelessWidget {
   /// Header options list
   ///
   /// # Header (Header 1 - #)
   /// ## Header (Header 2 - ##)
   /// ### Header (Header 3 - ###)
-  final List<String> headers;
+  final List<int> headers;
 
   /// Header option icon (already defined at [MarkdownType] enum)
   final String optionIcon;
@@ -195,28 +225,25 @@ class _MarkdownHeaderButtonWidget extends StatelessWidget {
           hoverColor: Colors.transparent,
           splashColor: Colors.transparent,
         ),
-        child: DropdownButton<String>(
+        child: DropdownButton<int>(
           underline: const SizedBox.shrink(),
           value: headers.first,
-          items: headers.map(
-            (header) {
-              final index = headers.indexOf(header);
-              return DropdownMenuItem(
-                value: header,
-                child: SvgPicture.asset(
-                  optionIcon,
-                  height: 32 - (index * 5),
-                  colorFilter: ColorFilter.mode(
-                    optionColor!,
-                    BlendMode.srcIn,
+          items: headers
+              .map(
+                (header) => DropdownMenuItem(
+                  value: header,
+                  child: SvgPicture.string(
+                    optionIcon,
+                    height: 32 - ((header - 1) * 5),
+                    colorFilter: ColorFilter.mode(
+                      optionColor!,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
-              );
-            },
-          ).toList(),
-          onChanged: (value) {
-            onSelectHeader(int.parse(value!.split(' ').last));
-          },
+              )
+              .toList(),
+          onChanged: (value) => onSelectHeader(value!),
         ),
       ),
     );

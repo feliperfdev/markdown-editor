@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:markdown_editor_mobile_web/src/widgets/md_editor_widget.dart';
+import 'package:markdown_editor_mobile_web/markdown_editor_mobile_web.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: MarkdownEditor(
                   textFieldHeight: 230,
+                  inputBorderRadius: BorderRadius.circular(4),
                   markdownText: (value) {
                     setState(() {
                       text = value;
