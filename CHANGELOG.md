@@ -40,8 +40,6 @@
 
 - Ordered list markdown multiline selection fix when applied with button use
 
-- `flutter_markdown` removed from dependencies
-
   ```
   RAW TEXT        BEFORE              NOW
 
@@ -51,5 +49,7 @@
   repeated        2. repeated         4. repeated
   different_2     3. different_2      5. different_2
   ```
+
+- `flutter_markdown` removed from dependencies
 
 <!-- TODO(Felipe): Checkbox multi-selection button (checked and unchecked options) -->
