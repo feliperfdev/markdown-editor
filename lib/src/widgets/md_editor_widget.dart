@@ -43,6 +43,11 @@ class MarkdownEditor extends StatefulWidget {
   /// Default value is [Colors.black]
   final Color? inputBorderColor;
 
+  /// Determines text field border stroke width
+  ///
+  /// Default value is `1.5`
+  final double? inputBorderWidth;
+
   /// Determines text field cursor color
   ///
   /// Default value is [Colors.black]
@@ -67,6 +72,7 @@ class MarkdownEditor extends StatefulWidget {
     this.textFieldHeight = 190,
     this.textFieldMaxLines = 200,
     this.inputBorderRadius = BorderRadius.zero,
+    this.inputBorderWidth = 1.5,
     this.inputCursorColor = Colors.black,
     this.inputTextSelectionColor,
     this.inputBorderColor = Colors.black,
@@ -99,9 +105,8 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
 
   @override
   void dispose() {
-    controller.textController.removeListener(_setMarkdownText);
-    controller.textController.clear();
-    controller.textController.dispose();
+    /// Clear and dispose [TextEditingController]
+    controller.dispose();
     super.dispose();
   }
 
@@ -113,48 +118,15 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Wrap(
-                children: [
-                  ...controller.mdTypes.map(
-                    (type) => Tooltip(
-                      decoration:
-                          widget.showTooltip! ? null : const BoxDecoration(),
-                      message: type[OptionsConstantKey.optionName],
-                      child: type[OptionsConstantKey.optionType] ==
-                              MarkdownType.header
-                          ? _MarkdownHeaderButtonWidget(
-                              headers: controller.headers,
-                              optionIcon: type[OptionsConstantKey.optionIcon],
-                              optionColor: widget.optionsColor,
-                              onSelectHeader: (h) {
-                                controller.headerCount = h;
-                                controller.onSelectType(MarkdownType.header);
-                              },
-                            )
-                          : TextButton(
-                              style: ButtonStyle(
-                                overlayColor: MaterialStateProperty.all(
-                                  Colors.transparent,
-                                ),
-                              ),
-                              onPressed: () {
-                                controller.onSelectType(
-                                    type[OptionsConstantKey.optionType]);
-                              },
-                              child: SvgPicture.string(
-                                type[OptionsConstantKey.optionIcon],
-                                colorFilter: ColorFilter.mode(
-                                  widget.optionsColor!,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                            ),
-                    ),
-                  )
-                ],
+              _MarkdownWrapOptionsWidget(
+                controller: controller,
+                optionsColor: widget.optionsColor,
+                showTooltip: widget.showTooltip,
               ),
-              // Spacing between Markdown types and text editor
+
+              // Spacing between Markdown type options and text editor
               SizedBox(height: widget.optionsSpacingFromEditor),
+              //
               SizedBox(
                 height: widget.textFieldHeight,
                 width: MediaQuery.sizeOf(context).width,
@@ -175,7 +147,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                             BorderRadius.circular(4),
                         borderSide: BorderSide(
                           color: widget.inputBorderColor ?? Colors.black,
-                          width: 1.5,
+                          width: widget.inputBorderWidth ?? 1,
                         ),
                       ),
                     ),
@@ -185,6 +157,64 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
             ],
           );
         });
+  }
+}
+
+class _MarkdownWrapOptionsWidget extends StatelessWidget {
+  final MarkdownEditorController controller;
+
+  /// Header option color
+  ///
+  /// Default value is [Colors.black]
+  final Color? optionsColor;
+
+  /// Header option icon (already defined at [MarkdownType] enum)
+  final bool? showTooltip;
+
+  const _MarkdownWrapOptionsWidget({
+    required this.controller,
+    required this.optionsColor,
+    required this.showTooltip,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: [
+        ...controller.mdTypes.map(
+          (type) => Tooltip(
+            decoration: showTooltip! ? null : const BoxDecoration(),
+            message: type[OptionsConstantKey.optionName],
+            child: type[OptionsConstantKey.optionType] == MarkdownType.header
+                ? _MarkdownHeaderButtonWidget(
+                    headers: controller.headers,
+                    optionIcon: type[OptionsConstantKey.optionIcon],
+                    optionColor: optionsColor,
+                    onSelectHeader: (h) {
+                      controller.headerCount = h;
+                      controller.onSelectType(MarkdownType.header);
+                    },
+                  )
+                : TextButton(
+                    style: ButtonStyle(
+                      overlayColor: MaterialStateProperty.all(
+                        Colors.transparent,
+                      ),
+                    ),
+                    onPressed: () => controller
+                        .onSelectType(type[OptionsConstantKey.optionType]),
+                    child: SvgPicture.string(
+                      type[OptionsConstantKey.optionIcon],
+                      colorFilter: ColorFilter.mode(
+                        optionsColor!,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
+          ),
+        )
+      ],
+    );
   }
 }
 

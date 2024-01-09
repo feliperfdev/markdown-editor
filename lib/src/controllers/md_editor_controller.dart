@@ -12,9 +12,16 @@ abstract class MarkdownEditorController {
 
   // Header `#` before selected text counting
   int headerCount = 0;
+
+  bool checkboxIsChecked = false;
+
+  void dispose();
 }
 
 class MarkdownEditorControllerImpl implements MarkdownEditorController {
+  @override
+  bool checkboxIsChecked = false;
+
   @override
   int headerCount = 1;
 
@@ -63,7 +70,7 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
       case MarkdownType.underline:
         _underlineSelection();
       case MarkdownType.checkbox:
-        _checkboxBuilder(marked: false);
+        _checkboxSelection(marked: checkboxIsChecked);
       default:
         textController.clear();
     }
@@ -76,22 +83,18 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
 
   // Initial selection cursor index on text
   int get _start => selectionIndexes.selectionStartIndex;
-  // End selection cursor index on text
 
+  // End selection cursor index on text
   int get _end => selectionIndexes.selectionEndIndex;
 
-  // Selected text between both initial and end indexes on [TextField]
+  // Selected text between both initial and end indexes on TextField
   String get _selectedText => textController.text.substring(_start, _end);
 
-  void _boldSelection() {
-    textController.text =
-        textController.text.replaceRange(_start, _end, '**$_selectedText**');
-  }
+  void _boldSelection() => textController.text =
+      textController.text.replaceRange(_start, _end, '**$_selectedText**');
 
-  void _italicSelection() {
-    textController.text =
-        textController.text.replaceRange(_start, _end, '_${_selectedText}_');
-  }
+  void _italicSelection() => textController.text =
+      textController.text.replaceRange(_start, _end, '_${_selectedText}_');
 
   void _headerSelection(int h) {
     if (h >= 0 && h <= 3) {
@@ -101,12 +104,14 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
         '${h == 0 ? "" : List.generate(h, (_) => '#').join()} $_selectedText',
       );
     }
+
+    headerCount = 0;
   }
 
-  void _linkSelection() {
-    textController.text = textController.text.replaceRange(_start, _end,
-        '[${_selectedText.trim().isEmpty ? "link_example" : _selectedText}](https://your_link_url.example)');
-  }
+  void _linkSelection() => textController.text = textController.text.replaceRange(
+      _start,
+      _end,
+      '[${_selectedText.trim().isEmpty ? "link_example" : _selectedText}](https://your_link_url.example)');
 
   void _listSelection() {
     final splitted = _selectedText.split('\n');
@@ -136,20 +141,14 @@ class MarkdownEditorControllerImpl implements MarkdownEditorController {
     );
   }
 
-  void _strikeThroughSelection() {
-    textController.text =
-        textController.text.replaceRange(_start, _end, '~~$_selectedText~~');
-  }
+  void _strikeThroughSelection() => textController.text =
+      textController.text.replaceRange(_start, _end, '~~$_selectedText~~');
 
-  void _underlineSelection() {
-    textController.text =
-        textController.text.replaceRange(_start, _end, '<u>$_selectedText</u>');
-  }
+  void _underlineSelection() => textController.text =
+      textController.text.replaceRange(_start, _end, '<u>$_selectedText</u>');
 
-  void _blockQuoteSelection() {
-    textController.text =
-        textController.text.replaceRange(_start, _end, '> $_selectedText');
-  }
+  void _blockQuoteSelection() => textController.text =
+      textController.text.replaceRange(_start, _end, '> $_selectedText');
 
   void _codeSelection() {
     final lines = '\n'.allMatches(_selectedText).length + 1;
@@ -166,16 +165,15 @@ $_selectedText
     );
   }
 
-  void _separatorSelection() {
-    textController.text = textController.text.replaceRange(_start, _end, '---');
-  }
+  void _separatorSelection() => textController.text =
+      textController.text.replaceRange(_start, _end, '---');
 
-  void _imageSelection() {
-    textController.text = textController.text.replaceRange(_start, _end,
-        '![${_selectedText.trim().isEmpty ? "image_example" : _selectedText}](https://your_image_url.example)');
-  }
+  void _imageSelection() => textController.text = textController.text.replaceRange(
+      _start,
+      _end,
+      '![${_selectedText.trim().isEmpty ? "image_example" : _selectedText}](https://your_image_url.example)');
 
-  void _checkboxBuilder({bool marked = false}) {
+  void _checkboxSelection({bool marked = false}) {
     final splitted = _selectedText.split('\n');
 
     textController.text = textController.text.replaceRange(
@@ -185,5 +183,15 @@ $_selectedText
           final index = splitted.indexOf(e.$2);
           return '- [${marked ? "x" : " "}] ${_selectedText.isEmpty ? 'Text' : e.$2}${index == splitted.length - 1 ? '' : '\n'}';
         }).join());
+    checkboxIsChecked = false;
+  }
+
+  @override
+  void dispose() {
+    headerCount = 0;
+    checkboxIsChecked = false;
+    textController
+      ..clear()
+      ..dispose();
   }
 }

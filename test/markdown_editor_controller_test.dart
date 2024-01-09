@@ -153,5 +153,28 @@ Four
 4. Four
 ''');
     });
+
+    test('- Checkbox unchecked', () {
+      final textController = controller.textController;
+      textController.text = 'flutter is the future';
+      textController.selection = textController.selection.copyWith(
+        baseOffset: 0,
+        extentOffset: textController.text.length,
+      );
+      controller.onSelectType(MarkdownType.checkbox);
+      expect(textController.text, '- [ ] flutter is the future');
+    });
+
+    test('- Checkbox checked', () {
+      final textController = controller.textController;
+      textController.text = 'flutter is the future';
+      textController.selection = textController.selection.copyWith(
+        baseOffset: 0,
+        extentOffset: textController.text.length,
+      );
+      controller.checkboxIsChecked = true;
+      controller.onSelectType(MarkdownType.checkbox);
+      expect(textController.text, '- [x] flutter is the future');
+    });
   });
 }
