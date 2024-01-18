@@ -159,4 +159,17 @@ abstract class MarkdownSvg {
 </defs>
 </svg>
 ''';
+
+  static const String checkboxUnchecked =
+      '''<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_47_2)">
+<path d="M25.3333 6.66667V25.3333H6.66667V6.66667H25.3333ZM25.3333 4H6.66667C5.2 4 4 5.2 4 6.66667V25.3333C4 26.8 5.2 28 6.66667 28H25.3333C26.8 28 28 26.8 28 25.3333V6.66667C28 5.2 26.8 4 25.3333 4Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_47_2">
+<rect width="32" height="32" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+''';
 }

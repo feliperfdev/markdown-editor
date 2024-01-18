@@ -56,6 +56,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       text = value;
                     });
                   },
+                  doNotShowTypes: const [
+                    MarkdownType.separator,
+                    MarkdownType.image,
+                    MarkdownType.link,
+                  ],
                 ),
               ),
               const SizedBox(height: 40),

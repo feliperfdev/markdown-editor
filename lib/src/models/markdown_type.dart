@@ -109,6 +109,13 @@ enum MarkdownType {
     MarkdownSvg.separator,
   ),
 
+  ///
+  ///
+  /// `- [ ] Text`
+  ///
+  /// `- [x] Text`
+  ///
+  ///
   checkbox(
     'Checkbox',
     MarkdownSvg.checkbox,
