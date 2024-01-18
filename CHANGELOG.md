@@ -52,4 +52,22 @@
 
 - `flutter_markdown` removed from dependencies
 
-<!-- TODO(Felipe): Checkbox multi-selection button (checked and unchecked options) -->
+### 0.0.4
+
+- Markdown type Checkbox checked and unchecked included in a Dropdown
+
+- Now it's possible to inform which `MarkdownType` (option above text field) will be shown
+
+```dart
+MarkdownEditor(
+  textFieldHeight: 230,
+  inputBorderRadius: BorderRadius.circular(4),
+
+  // Do not show listed types
+  doNotShowTypes: const [
+    MarkdownType.separator,
+    MarkdownType.image,
+    MarkdownType.link,
+  ],
+),
+```
